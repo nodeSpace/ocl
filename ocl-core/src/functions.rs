@@ -2766,6 +2766,41 @@ pub fn enqueue_copy_buffer<T, M, En, Ewl>(
     eval_errcode(errcode, (), "clEnqueueCopyBuffer", None::<String>)
 }
 
+/// Copies the contents of one buffer to another, using device pointers
+/// (useful for interop with other gpgpu libraries)
+pub unsafe fn raw_enqueue_copy_buffer<T, En, Ewl>(
+            command_queue: &CommandQueue,
+            src_buffer: cl_mem,
+            dst_buffer: cl_mem,
+            src_offset: usize,
+            dst_offset: usize,
+            len: usize,
+            wait_list: Option<Ewl>,
+            new_event: Option<En>,
+        ) -> OclCoreResult<()>
+        where T: OclPrm, En: ClNullEventPtr, Ewl: ClWaitListPtr
+{
+    let (wait_list_len, wait_list_ptr, new_event_ptr)
+        = resolve_event_ptrs(wait_list, new_event);
+
+    let src_offset_bytes = src_offset * mem::size_of::<T>();
+    let dst_offset_bytes = dst_offset * mem::size_of::<T>();
+    let len_bytes = len * mem::size_of::<T>();
+
+    let errcode = unsafe { ffi::clEnqueueCopyBuffer(
+        command_queue.as_ptr(),
+        src_buffer,
+        dst_buffer,
+        src_offset_bytes,
+        dst_offset_bytes,
+        len_bytes,
+        wait_list_len,
+        wait_list_ptr,
+        new_event_ptr,
+    ) };
+    eval_errcode(errcode, (), "clEnqueueCopyBuffer", None::<String>)
+}
+
 /// Enqueues a command to copy a rectangular region from a buffer object to
 /// another buffer object.
 ///
