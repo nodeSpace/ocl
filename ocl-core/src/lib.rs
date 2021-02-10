@@ -150,7 +150,7 @@ pub use self::functions::{get_platform_ids, get_platform_info, get_device_ids, g
     get_event_info, create_user_event, retain_event, release_event, set_user_event_status,
     set_event_callback, get_event_profiling_info, flush, finish, enqueue_read_buffer,
     enqueue_read_buffer_rect, enqueue_write_buffer, enqueue_write_buffer_rect, enqueue_copy_buffer,
-    enqueue_copy_buffer_rect,
+    enqueue_copy_buffer_ptrs, enqueue_copy_buffer_rect,
     enqueue_read_image, enqueue_write_image, enqueue_fill_image, enqueue_copy_image,
     enqueue_copy_image_to_buffer, enqueue_copy_buffer_to_image, enqueue_map_buffer,
     enqueue_map_image, enqueue_unmap_mem_object, enqueue_migrate_mem_objects, enqueue_kernel,
