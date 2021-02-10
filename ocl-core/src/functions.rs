@@ -2768,7 +2768,7 @@ pub fn enqueue_copy_buffer<T, M, En, Ewl>(
 
 /// Copies the contents of one buffer to another, using device pointers
 /// (useful for interop with other gpgpu libraries)
-pub unsafe fn raw_enqueue_copy_buffer<T, En, Ewl>(
+pub unsafe fn enqueue_copy_buffer_ptrs<T, En, Ewl>(
             command_queue: &CommandQueue,
             src_buffer: cl_mem,
             dst_buffer: cl_mem,
@@ -2787,7 +2787,7 @@ pub unsafe fn raw_enqueue_copy_buffer<T, En, Ewl>(
     let dst_offset_bytes = dst_offset * mem::size_of::<T>();
     let len_bytes = len * mem::size_of::<T>();
 
-    let errcode = unsafe { ffi::clEnqueueCopyBuffer(
+    let errcode = ffi::clEnqueueCopyBuffer(
         command_queue.as_ptr(),
         src_buffer,
         dst_buffer,
@@ -2797,7 +2797,7 @@ pub unsafe fn raw_enqueue_copy_buffer<T, En, Ewl>(
         wait_list_len,
         wait_list_ptr,
         new_event_ptr,
-    ) };
+    );
     eval_errcode(errcode, (), "clEnqueueCopyBuffer", None::<String>)
 }
 
